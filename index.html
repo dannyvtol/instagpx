@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InstaGPX - Upload GPX Files</title>
+    <title>GPX naar Instagram Story</title>
     <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+<body lang="nl">
     <div class="container">
         <header class="header">
-            <h1>InstaGPX</h1>
-            <p>Upload and manage your GPX files with ease</p>
+            <h1>GPX naar Instagram Story</h1>
+            <p>Genereer een Instagram story van je GPX file</p>
         </header>
 
         <main class="upload-section">
             <div class="upload-area" id="uploadArea">
                 <input type="file" id="fileInput" accept=".gpx">
                 <div class="upload-icon">📁</div>
-                <div class="upload-text">Drop your GPX file here</div>
-                <div class="upload-subtext">or click to browse file</div>
+                <div class="upload-text">Drop je GPX file hier</div>
+                <div class="upload-subtext">of klik om te bladeren</div>
             </div>
             
             <div class="analysis-results" id="analysisResults">
@@ -26,24 +26,24 @@
                     <h4>Instagram Export</h4>
                     <div class="export-settings">
                         <div class="setting-group">
-                            <label for="customTitle">Custom Title:</label>
-                            <input type="text" id="customTitle" placeholder="Enter custom title..." value="Activity Summary">
+                            <label for="customTitle">Activiteit:</label>
+                            <input type="text" id="customTitle" placeholder="Enter custom title..." value="Activiteit">
                         </div>
                         <div class="setting-group">
-                            <label for="shoeInfo">Shoes Used:</label>
+                            <label for="shoeInfo">Schoenen:</label>
                             <input type="text" id="shoeInfo" placeholder="Enter shoe information...">
                         </div>
                     </div>
                     <div class="export-buttons">
                         <button class="export-btn" id="exportStoryHDBtn">
-                            📱 Create HD Instagram Story (1080x1920)
+                            📱 Ververs voorbeeld
                         </button>
                     </div>
                     <div class="export-preview" id="exportPreview">
                         <canvas id="exportCanvas" width="270" height="480"></canvas>
                         <div class="preview-actions">
                             <button class="download-btn" id="downloadBtn" style="display: none;">
-                                💾 Download Image
+                                💾 Download Instagram Story
                             </button>
                         </div>
                     </div>

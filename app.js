@@ -228,17 +228,20 @@ class GPXInstagram {
     displayAnalysisResults(analysis) {
         this.currentAnalysis = analysis;
         this.analysisResults.classList.add('show');
-        this.generateInstagramStoryPreview(this.currentAnalysis);
+        this.generateInstagramStory(this.currentAnalysis);
     }
 
     setupEventListeners() {
         this.exportStoryHDBtn.addEventListener('click', () => {
             if (this.currentAnalysis) {
-                this.generateInstagramStoryPreview(this.currentAnalysis);
+                this.generateInstagramStory(this.currentAnalysis);
             }
         });
         
         this.downloadBtn.addEventListener('click', () => {
+            if (this.currentAnalysis) {
+                this.generateInstagramStory(this.currentAnalysis);
+            }
             this.downloadCurrentStory();
         });
     }
@@ -273,11 +276,6 @@ class GPXInstagram {
         return this.formatTime(pace * 60) + '/km';
     }
 
-    formatElevation(meters) {
-        if (!meters) return '--';
-        return `${Math.round(meters)}m`;
-    }
-
     calculateBounds(points) {
         let minLat = points[0].lat;
         let maxLat = points[0].lat;
@@ -303,7 +301,7 @@ class GPXInstagram {
                 const date = new Date(point.time);
                 if (!isNaN(date.getTime())) {
                     // Format as "Month Day, Year" (e.g., "January 15, 2024")
-                    return date.toLocaleDateString('en-US', {
+                    return date.toLocaleDateString('nl-NL', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
@@ -315,7 +313,7 @@ class GPXInstagram {
         return null;
     }
 
-    generateInstagramStoryPreview(analysis) {
+    generateInstagramStory(analysis) {
         // Create high-resolution canvas for the story
         const hdCanvas = document.createElement('canvas');
         hdCanvas.width = 1080;
@@ -386,7 +384,7 @@ class GPXInstagram {
         if (shoeInfo) {
             ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillText(`${shoeInfo}`, width / 2, 345);
+            ctx.fillText(`${shoeInfo}`, width / 2, 1585);
         }
         
         // Reset shadow
@@ -396,74 +394,74 @@ class GPXInstagram {
         ctx.shadowOffsetY = 0;
         
         // Draw track visualization
-        this.drawTrackForStory(ctx, 90, 490, 900, 500, analysis.trackPoints);
+        this.drawTrackForStory(ctx, 90, 710, 900, 500, analysis.trackPoints);
         
         // Add metrics as cards in 2x2 grid
-        const metricsY = 1210;
-        const cardWidth = 450;
-        const cardHeight = 300;
-        const cardSpacing = 50;
+        const cardWidth = 950;
+        const cardHeight = 240;
+
+        const cardX = 65;
+        const cardY = 1615;
+            
+        // Draw card with glass-morphism effect
+        ctx.save();
+            
+        // Create rounded rectangle
+        ctx.beginPath();
+        ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 30);
+        ctx.clip();
+            
+        // Semi-transparent background with gradient
+        const cardGradient = ctx.createLinearGradient(cardX, cardY, cardX, cardY + cardHeight);
+        cardGradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
+        cardGradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
+        ctx.fillStyle = cardGradient;
+        ctx.fillRect(cardX, cardY, cardWidth, cardHeight);
+            
+        // Add subtle border
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+            
+        ctx.restore();
+            
+        // Add shadow effect
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+        ctx.shadowBlur = 20;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 5;
         
         const metrics = [
-            { label: 'Duration', value: this.formatDuration(analysis.duration), icon: '⏱️' },
-            { label: 'Distance', value: this.formatDistance(analysis.totalDistance), icon: '📏' },
-            { label: 'Pace', value: this.formatPace(analysis.averagePace), icon: '🏃' },
-            { label: 'Elevation', value: this.formatElevation(analysis.elevationGain), icon: '↑↓' }
+            { label: 'Tijd', value: this.formatDuration(analysis.duration)},
+            { label: 'Afstand', value: this.formatDistance(analysis.totalDistance)},
+            { label: 'Tempo', value: this.formatPace(analysis.averagePace), icon: '🏃' },
         ];
         
         metrics.forEach((metric, index) => {
-            const cardX = 65 + (index % 2) * (cardWidth + cardSpacing);
-            const cardY = metricsY + Math.floor(index / 2) * (cardHeight + cardSpacing);
-            
-            // Draw card with glass-morphism effect
-            ctx.save();
-            
-            // Create rounded rectangle
-            ctx.beginPath();
-            ctx.roundRect(cardX, cardY, cardWidth, cardHeight, 30);
-            ctx.clip();
-            
-            // Semi-transparent background with gradient
-            const cardGradient = ctx.createLinearGradient(cardX, cardY, cardX, cardY + cardHeight);
-            cardGradient.addColorStop(0, 'rgba(255, 255, 255, 0.25)');
-            cardGradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
-            ctx.fillStyle = cardGradient;
-            ctx.fillRect(cardX, cardY, cardWidth, cardHeight);
-            
-            // Add subtle border
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            ctx.restore();
-            
-            // Add shadow effect
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-            ctx.shadowBlur = 20;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 5;
-            
-            // Draw icon
-            ctx.font = '80px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = 'white';
-            ctx.fillText(metric.icon, cardX + cardWidth/2, cardY + 110);
-            
+            let correction = 0;
+
+            if (index === 0) {
+                ctx.textAlign = 'left';
+                correction = -420;
+            }
+
+            if (index === 2) {
+                ctx.textAlign = 'right';
+                correction = 420;
+            }
+
             // Draw label
             ctx.font = 'bold 48px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillText(metric.label, cardX + cardWidth/2, cardY + 180);
+            ctx.fillText(metric.label, cardX + cardWidth/2 + correction, cardY + 95);
+            
             
             // Draw value
-            ctx.font = 'bold 60px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+            ctx.font = 'bold 54px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
             ctx.fillStyle = 'white';
-            ctx.fillText(metric.value, cardX + cardWidth/2, cardY + 250);
-            
-            // Reset shadow
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
+            ctx.fillText(metric.value, cardX + cardWidth/2 + correction, cardY + 180);
+
+            ctx.textAlign = 'center';
         });
         
         // Reset shadow
@@ -494,7 +492,7 @@ class GPXInstagram {
         ctx.shadowOffsetY = 3;
         
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 12;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         
