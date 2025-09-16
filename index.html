@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaGPX - Upload GPX Files</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>InstaGPX</h1>
+            <p>Upload and manage your GPX files with ease</p>
+        </header>
+
+        <main class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" accept=".gpx">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Drop your GPX file here</div>
+                <div class="upload-subtext">or click to browse file</div>
+            </div>
+            
+            <div class="analysis-results" id="analysisResults">
+                <h3>GPX Analysis Results</h3>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">⏱️</div>
+                        <div class="metric-label">Total Duration</div>
+                        <div class="metric-value" id="totalDuration">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📏</div>
+                        <div class="metric-label">Total Distance</div>
+                        <div class="metric-value" id="totalDistance">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🏃</div>
+                        <div class="metric-label">Average Pace</div>
+                        <div class="metric-value" id="averagePace">--</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">↑↓</div>
+                        <div class="metric-label">Elevation Gain</div>
+                        <div class="metric-value" id="elevationGain">--</div>
+                    </div>
+                    <div class="metric-card track-visualization">
+                        <div class="metric-icon">🗺️</div>
+                        <div class="metric-label">Track Visualization</div>
+                        <div class="track-canvas-container">
+                            <canvas id="trackCanvas" width="200" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+        <div class="instagram-export">
+            <h4>Instagram Export</h4>
+            <div class="export-settings">
+                <div class="setting-group">
+                    <label for="customTitle">Custom Title:</label>
+                    <input type="text" id="customTitle" placeholder="Enter custom title..." value="Activity Summary">
+                </div>
+                <div class="setting-group">
+                    <label for="shoeInfo">Shoes Used:</label>
+                    <input type="text" id="shoeInfo" placeholder="Enter shoe information...">
+                </div>
+            </div>
+            <div class="export-buttons">
+                <button class="export-btn" id="exportStoryHDBtn">
+                    📱 Create HD Instagram Story (1080x1920)
+                </button>
+            </div>
+            <div class="export-preview" id="exportPreview">
+                <canvas id="exportCanvas" width="270" height="480"></canvas>
+                <div class="preview-actions">
+                    <button class="download-btn" id="downloadBtn" style="display: none;">
+                        💾 Download Image
+                    </button>
+                </div>
+            </div>
+        </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="./app.js" defer></script>
+</body>
+</html>
