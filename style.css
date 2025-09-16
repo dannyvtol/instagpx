@@ -146,99 +146,6 @@ body {
     transform: translateY(0);
 }
 
-.progress-container {
-    margin-top: 1.5rem;
-    display: none;
-}
-
-.progress-container.show {
-    display: block;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: #e2e8f0;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-    width: 0%;
-    transition: width 0.3s ease;
-}
-
-.progress-text {
-    text-align: center;
-    margin-top: 0.5rem;
-    font-size: 0.875rem;
-    color: #718096;
-}
-
-.success-message {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: #f0fff4;
-    border: 1px solid #9ae6b4;
-    border-radius: 8px;
-    color: #22543d;
-    display: none;
-}
-
-.success-message.show {
-    display: block;
-}
-
-.error-message {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: #fed7d7;
-    border: 1px solid #feb2b2;
-    border-radius: 8px;
-    color: #742a2a;
-    display: none;
-}
-
-.error-message.show {
-    display: block;
-}
-
-.features {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-}
-
-.features h3 {
-    font-size: 1.25rem;
-    color: #2d3748;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.feature-list {
-    list-style: none;
-    display: grid;
-    gap: 0.75rem;
-}
-
-.feature-list li {
-    display: flex;
-    align-items: center;
-    font-size: 0.875rem;
-    color: #4a5568;
-}
-
-.feature-list li::before {
-    content: "✓";
-    color: #4facfe;
-    font-weight: bold;
-    margin-right: 0.5rem;
-}
-
 /* Tablet and Desktop Styles */
 @media (min-width: 768px) {
     .container {
@@ -260,15 +167,6 @@ body {
 
     .upload-text {
         font-size: 1.25rem;
-    }
-
-    .features {
-        margin-top: 3rem;
-    }
-
-    .feature-list {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
     }
 }
 
@@ -307,137 +205,8 @@ body {
     font-weight: 700;
 }
 
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.metric-card {
-    background: white;
-    padding: 1.5rem 1rem;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-}
-
-.metric-card:hover {
-    transform: translateY(-2px);
-}
-
-.metric-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.metric-label {
-    font-size: 0.875rem;
-    color: #718096;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-.metric-value {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #2d3748;
-}
-
-.track-visualization {
-    grid-column: 1 / -1;
-    max-width: 100%;
-}
-
-.track-canvas-container {
-    margin-top: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    padding: 0.5rem;
-}
-
-#trackCanvas {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.analysis-details {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.analysis-details h4 {
-    font-size: 1.125rem;
-    color: #2d3748;
-    margin-bottom: 1rem;
-    font-weight: 600;
-}
-
-.detail-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.detail-item:last-child {
-    border-bottom: none;
-}
-
-.detail-label {
-    font-size: 0.875rem;
-    color: #4a5568;
-    font-weight: 500;
-}
-
-.detail-value {
-    font-size: 0.875rem;
-    color: #2d3748;
-    font-weight: 600;
-}
-
-/* Mobile adjustments for analysis results */
-@media (max-width: 767px) {
-    .metrics-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-    
-    .metric-card {
-        padding: 1rem 0.75rem;
-    }
-    
-    .metric-icon {
-        font-size: 1.5rem;
-    }
-    
-    .metric-value {
-        font-size: 1.125rem;
-    }
-    
-    .analysis-details {
-        padding: 1rem;
-    }
-    
-    .detail-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
-}
-
 /* Instagram Export Styles */
 .instagram-export {
-    margin-top: 2rem;
     padding: 1.5rem;
     background: #f8f9fa;
     border-radius: 12px;
@@ -551,7 +320,7 @@ body {
 }
 
 .download-btn {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;

@@ -5,7 +5,7 @@ class GPXForm {
         
         this.selectedFile = null;
         this.processor = new GPXProcessor();
-        this.metrics = new GPXMetrics();
+        this.instagram = new GPXInstagram();
         this.setupEventListeners();
     }
 
@@ -49,7 +49,7 @@ class GPXForm {
 
         this.selectedFile = validFiles[0];
         this.analyzeGPXFile(this.selectedFile).then(analysis => {
-            this.metrics.displayAnalysisResults(analysis);
+            this.instagram.displayAnalysisResults(analysis);
         });
     }
 
@@ -210,14 +210,9 @@ class GPXProcessor {
     }
 }
 
-class GPXMetrics {
+class GPXInstagram {
     constructor() {
-        this.totalDuration = document.getElementById('totalDuration');
-        this.totalDistance = document.getElementById('totalDistance');
-        this.averagePace = document.getElementById('averagePace');
-        this.elevationGain = document.getElementById('elevationGain');
         this.analysisResults = document.getElementById('analysisResults');
-        this.trackCanvas = document.getElementById('trackCanvas');
         this.exportStoryHDBtn = document.getElementById('exportStoryHDBtn');
         this.exportPreview = document.getElementById('exportPreview');
         this.exportCanvas = document.getElementById('exportCanvas');
@@ -231,15 +226,9 @@ class GPXMetrics {
     }
 
     displayAnalysisResults(analysis) {
-        this.totalDuration.textContent = this.formatDuration(analysis.duration);
-        this.totalDistance.textContent = this.formatDistance(analysis.totalDistance);
-        this.averagePace.textContent = this.formatPace(analysis.averagePace);
-        this.elevationGain.textContent = this.formatElevation(analysis.elevationGain);
-        
-        this.drawTrackVisualization(analysis.trackPoints);
         this.currentAnalysis = analysis;
-        
         this.analysisResults.classList.add('show');
+        this.generateInstagramStoryPreview(this.currentAnalysis);
     }
 
     setupEventListeners() {
@@ -287,68 +276,6 @@ class GPXMetrics {
     formatElevation(meters) {
         if (!meters) return '--';
         return `${Math.round(meters)}m`;
-    }
-
-    drawTrackVisualization(trackPoints) {
-        if (!this.trackCanvas || trackPoints.length < 2) return;
-
-        const canvas = this.trackCanvas;
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-
-        // Clear canvas
-        ctx.clearRect(0, 0, width, height);
-
-        // Calculate bounds
-        const bounds = this.calculateBounds(trackPoints);
-        const padding = 20;
-        const scaleX = (width - 2 * padding) / (bounds.maxLon - bounds.minLon);
-        const scaleY = (height - 2 * padding) / (bounds.maxLat - bounds.minLat);
-        const scale = Math.min(scaleX, scaleY);
-
-        // Center the track
-        const centerX = width / 2;
-        const centerY = height / 2;
-        const trackWidth = (bounds.maxLon - bounds.minLon) * scale;
-        const trackHeight = (bounds.maxLat - bounds.minLat) * scale;
-
-        // Draw track
-        ctx.strokeStyle = '#4facfe';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-
-        ctx.beginPath();
-        for (let i = 0; i < trackPoints.length; i++) {
-            const point = trackPoints[i];
-            const x = centerX - trackWidth / 2 + (point.lon - bounds.minLon) * scale;
-            const y = centerY - trackHeight / 2 + (bounds.maxLat - point.lat) * scale;
-
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        }
-        ctx.stroke();
-        
-        // Redraw track on top
-        ctx.strokeStyle = '#4facfe';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        for (let i = 0; i < trackPoints.length; i++) {
-            const point = trackPoints[i];
-            const x = centerX - trackWidth / 2 + (point.lon - bounds.minLon) * scale;
-            const y = centerY - trackHeight / 2 + (bounds.maxLat - point.lat) * scale;
-
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        }
-        ctx.stroke();
     }
 
     calculateBounds(points) {
@@ -427,20 +354,6 @@ class GPXMetrics {
         }
     }
 
-    generateInstagramStory(analysis) {
-        // Create canvas with Instagram story resolution (1080x1920)
-        const canvas = document.createElement('canvas');
-        canvas.width = 1080;
-        canvas.height = 1920;
-        const ctx = canvas.getContext('2d');
-        
-        // Draw the story
-        this.drawInstagramStory(ctx, analysis, canvas.width, canvas.height);
-        
-        // Download the image
-        this.downloadCanvas(canvas, 'instagram-story-1080x1920.png');
-    }
-
     drawInstagramStory(ctx, analysis, width, height) {
         // Create gradient background
         const gradient = ctx.createLinearGradient(0, 0, width, height);
@@ -483,7 +396,7 @@ class GPXMetrics {
         ctx.shadowOffsetY = 0;
         
         // Draw track visualization
-        this.drawTrackForStory(ctx, 90, 460, 900, 500, analysis.trackPoints);
+        this.drawTrackForStory(ctx, 90, 490, 900, 500, analysis.trackPoints);
         
         // Add metrics as cards in 2x2 grid
         const metricsY = 1210;
