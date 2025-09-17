@@ -217,6 +217,7 @@ class GPXInstagram {
         this.exportPreview = document.getElementById('exportPreview');
         this.exportCanvas = document.getElementById('exportCanvas');
         this.downloadBtn = document.getElementById('downloadBtn');
+        this.downloadBtnTransparent = document.getElementById('downloadBtnTransparent');
         this.customTitle = document.getElementById('customTitle');
         this.shoeInfo = document.getElementById('shoeInfo');
         
@@ -241,6 +242,13 @@ class GPXInstagram {
         this.downloadBtn.addEventListener('click', () => {
             if (this.currentAnalysis) {
                 this.generateInstagramStory(this.currentAnalysis);
+            }
+            this.downloadCurrentStory();
+        });
+
+        this.downloadBtnTransparent.addEventListener('click', () => {
+            if (this.currentAnalysis) {
+                this.generateInstagramStory(this.currentAnalysis, true);
             }
             this.downloadCurrentStory();
         });
@@ -313,7 +321,7 @@ class GPXInstagram {
         return null;
     }
 
-    generateInstagramStory(analysis) {
+    generateInstagramStory(analysis, transparent = false) {
         // Create high-resolution canvas for the story
         const hdCanvas = document.createElement('canvas');
         hdCanvas.width = 1080;
@@ -321,7 +329,7 @@ class GPXInstagram {
         const hdCtx = hdCanvas.getContext('2d');
         
         // Generate the full-resolution story
-        this.drawInstagramStory(hdCtx, analysis, hdCanvas.width, hdCanvas.height);
+        this.drawInstagramStory(hdCtx, analysis, hdCanvas.width, hdCanvas.height, transparent);
         
         // Store the HD canvas for download
         this.currentStoryCanvas = hdCanvas;
@@ -344,6 +352,7 @@ class GPXInstagram {
         // Show preview and download button
         this.exportPreview.classList.add('show');
         this.downloadBtn.style.display = 'flex';
+        this.downloadBtnTransparent.style.display = 'flex';
     }
 
     downloadCurrentStory() {
@@ -352,13 +361,16 @@ class GPXInstagram {
         }
     }
 
-    drawInstagramStory(ctx, analysis, width, height) {
+    drawInstagramStory(ctx, analysis, width, height, transparent = false) {
         // Create gradient background
-        const gradient = ctx.createLinearGradient(0, 0, width, height);
-        gradient.addColorStop(0, '#667eea');
-        gradient.addColorStop(1, '#764ba2');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
+        if (!transparent) {
+            const gradient = ctx.createLinearGradient(0, 0, width, height);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+        }
+        
         
         // Add custom title with shadow effect
         const customTitle = this.customTitle.value.trim() || 'Activity Summary';
@@ -366,17 +378,22 @@ class GPXInstagram {
         ctx.shadowBlur = 15;
         ctx.shadowOffsetX = 3;
         ctx.shadowOffsetY = 3;
+        ctx.lineWidth = 2;
         ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
         ctx.font = 'bold 72px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(customTitle, width / 2, 200);
+        ctx.strokeText(customTitle, width / 2, 200);
         
         // Add date with shadow effect
         const activityDate = this.getActivityDate(analysis.trackPoints);
         if (activityDate) {
             ctx.font = 'bold 48px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
             ctx.fillText(activityDate, width / 2, 280);
+            ctx.strokeText(activityDate, width / 2, 280);
         }
         
         // Add shoe information if provided
@@ -384,7 +401,9 @@ class GPXInstagram {
         if (shoeInfo) {
             ctx.font = 'bold 36px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
             ctx.fillText(`${shoeInfo}`, width / 2, 1585);
+            ctx.strokeText(`${shoeInfo}`, width / 2, 1585);
         }
         
         // Reset shadow
@@ -437,6 +456,8 @@ class GPXInstagram {
             { label: 'Tempo', value: this.formatPace(analysis.averagePace), icon: '🏃' },
         ];
         
+        ctx.lineWidth = 2;
+
         metrics.forEach((metric, index) => {
             let correction = 0;
 
@@ -452,14 +473,18 @@ class GPXInstagram {
 
             // Draw label
             ctx.font = 'bold 48px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
             ctx.fillText(metric.label, cardX + cardWidth/2 + correction, cardY + 95);
+            ctx.strokeText(metric.label, cardX + cardWidth/2 + correction, cardY + 95);
             
             
             // Draw value
             ctx.font = 'bold 54px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
             ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
             ctx.fillText(metric.value, cardX + cardWidth/2 + correction, cardY + 180);
+            ctx.strokeText(metric.value, cardX + cardWidth/2 + correction, cardY + 180);
 
             ctx.textAlign = 'center';
         });
@@ -486,12 +511,12 @@ class GPXInstagram {
         const trackHeight = (bounds.maxLat - bounds.minLat) * scale;
         
         // Draw track with shadow
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowColor = 'rgba(0, 0, 0, .7)';
         ctx.shadowBlur = 10;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 3;
         
-        ctx.strokeStyle = '#ffffff';
+        ctx.strokeStyle = 'white';
         ctx.lineWidth = 12;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
